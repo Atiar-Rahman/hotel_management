@@ -68,6 +68,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'staybangla.wsgi.app'
 
 CORS_ALLOWED_ORIGINS = [
+    "https://stay-bangla-mk4p.vercel.app",
     "https://react-core1.vercel.app",
     "http://localhost:5173",
 ]
