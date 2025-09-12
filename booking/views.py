@@ -15,10 +15,14 @@ from django.conf import settings as main_settings
 from rest_framework import status
 
 
+
 class HotelBookingViewSet(ModelViewSet):
     serializer_class = BookingSerializer
     permission_classes = [IsAuthenticated]
 
+    # ---------------------------
+    # Filter bookings by hotel and room if nested
+    # ---------------------------
     def get_queryset(self):
         hotel_id = self.kwargs.get("hotel_pk")
         room_id = self.kwargs.get("room_pk")
@@ -29,11 +33,13 @@ class HotelBookingViewSet(ModelViewSet):
             queryset = queryset.filter(room_id=room_id)
         return queryset
 
+    # ---------------------------
+    # Add extra context to serializer
+    # ---------------------------
     def get_serializer_context(self):
         context = super().get_serializer_context()
         hotel_id = self.kwargs.get("hotel_pk")
         
-        # Only try to fetch hotel if hotel_id exists
         if hotel_id:
             try:
                 context["hotel"] = Hotel.objects.get(id=hotel_id)
@@ -45,11 +51,15 @@ class HotelBookingViewSet(ModelViewSet):
         context["user"] = self.request.user
         return context
 
-
+    # ---------------------------
+    # Create booking
+    # ---------------------------
     def perform_create(self, serializer):
         serializer.save()
 
-
+    # ---------------------------
+    # Custom action: Cancel booking (user can cancel)
+    # ---------------------------
     @action(detail=True, methods=["get","post"], url_path="cancel")
     def cancel_booking(self, request, hotel_pk=None, room_pk=None, pk=None):
         booking = self.get_object()
@@ -70,6 +80,25 @@ class HotelBookingViewSet(ModelViewSet):
 
         serializer = self.get_serializer(booking)
         return Response(serializer.data, status=200)
+
+    # ---------------------------
+    # Override destroy for admin deletion
+    # ---------------------------
+    def destroy(self, request, *args, **kwargs):
+        booking = self.get_object()
+
+        # Update room availability just like cancel
+        room = booking.room
+        if room:
+            room.available_rooms += booking.num_rooms
+            room.available_rooms = min(room.available_rooms, room.total_rooms)
+            room.is_available = room.available_rooms > 0
+            room.save()
+
+        # Delete the booking
+        self.perform_destroy(booking)
+
+        return Response({"detail": "Booking deleted and room availability updated."}, status=204)
 
 
 class BookingViewSet(ModelViewSet):
