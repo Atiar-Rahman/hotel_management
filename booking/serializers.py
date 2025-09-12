@@ -33,6 +33,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
         # Get hotel from context (provided in view's perform_create)
         hotel = self.context.get("hotel")
+        # print(hotel)
         if not hotel:
             raise serializers.ValidationError({"hotel": "Hotel context is required."})
 
