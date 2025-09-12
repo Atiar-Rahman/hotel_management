@@ -244,7 +244,7 @@ def payment_success(request):
         except Booking.DoesNotExist:
             pass  # optionally log
 
-    return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
+    return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard")
 
 
 # Payment cancel
@@ -261,7 +261,7 @@ def payment_cancel(request):
         except Booking.DoesNotExist:
             pass
 
-    return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
+    return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard")
 
 
 # Payment fail
@@ -278,4 +278,4 @@ def payment_fail(request):
         except Booking.DoesNotExist:
             pass
 
-    return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
+    return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard")
