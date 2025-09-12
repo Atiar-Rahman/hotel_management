@@ -233,41 +233,49 @@ def initiate_payment(request):
 # Payment success
 @api_view(['POST', 'GET'])
 def payment_success(request):
-    tran_id = request.data.get("tran_id")  # txn_<random>_<booking_id>
-    booking_id = tran_id.split("_")[-1]
-    try:
-        booking = Booking.objects.get(id=booking_id)
-        booking.status = "confirmed"
-        booking.save()
-    except Booking.DoesNotExist:
-        pass  # optionally log
+    tran_id = request.data.get("tran_id") or request.GET.get("tran_id")
+    booking_id = tran_id.split("_")[-1] if tran_id else None
+
+    if booking_id:
+        try:
+            booking = Booking.objects.get(id=booking_id)
+            booking.status = "confirmed"
+            booking.save()
+        except Booking.DoesNotExist:
+            pass  # optionally log
 
     return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
+
 
 # Payment cancel
 @api_view(['POST', 'GET'])
 def payment_cancel(request):
-    tran_id = request.data.get("tran_id")
-    booking_id = tran_id.split("_")[-1]
-    try:
-        booking = Booking.objects.get(id=booking_id)
-        booking.status = "pending"
-        booking.save()
-    except Booking.DoesNotExist:
-        pass
+    tran_id = request.data.get("tran_id") or request.GET.get("tran_id")
+    booking_id = tran_id.split("_")[-1] if tran_id else None
+
+    if booking_id:
+        try:
+            booking = Booking.objects.get(id=booking_id)
+            booking.status = "pending"
+            booking.save()
+        except Booking.DoesNotExist:
+            pass
 
     return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
+
 
 # Payment fail
 @api_view(['POST', 'GET'])
 def payment_fail(request):
-    tran_id = request.data.get("tran_id")
-    booking_id = tran_id.split("_")[-1]
-    try:
-        booking = Booking.objects.get(id=booking_id)
-        booking.status = "failed"
-        booking.save()
-    except Booking.DoesNotExist:
-        pass
+    tran_id = request.data.get("tran_id") or request.GET.get("tran_id")
+    booking_id = tran_id.split("_")[-1] if tran_id else None
+
+    if booking_id:
+        try:
+            booking = Booking.objects.get(id=booking_id)
+            booking.status = "failed"
+            booking.save()
+        except Booking.DoesNotExist:
+            pass
 
     return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
