@@ -231,7 +231,7 @@ def initiate_payment(request):
 
 
 # Payment success
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 def payment_success(request):
     tran_id = request.data.get("tran_id")  # txn_<random>_<booking_id>
     booking_id = tran_id.split("_")[-1]
@@ -245,7 +245,7 @@ def payment_success(request):
     return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
 
 # Payment cancel
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 def payment_cancel(request):
     tran_id = request.data.get("tran_id")
     booking_id = tran_id.split("_")[-1]
@@ -259,7 +259,7 @@ def payment_cancel(request):
     return HttpResponseRedirect(f"{main_settings.FRONTEND_URL}/dashboard/showbooking/")
 
 # Payment fail
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 def payment_fail(request):
     tran_id = request.data.get("tran_id")
     booking_id = tran_id.split("_")[-1]
