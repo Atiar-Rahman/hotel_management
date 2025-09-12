@@ -38,6 +38,7 @@ image_router.register('images', HotelImageViewSet, basename='hotel-image')
 urlpatterns = [
     path("", include(router.urls)),
     path("", include(room_router.urls)),
+    path("", include(review_router.urls)),
     path("", include(booking_router.urls)),
     path("", include(image_router.urls)),
     path('auth/',include('djoser.urls')),
