@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
     'drf_yasg',
     'django_filters',
     'rest_framework',
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
 
 # Middleware
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -65,6 +67,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'staybangla.wsgi.app'
 
+CORS_ALLOWED_ORIGINS = [
+    # "https://example.com",
+    "http://localhost:5173",
+]
 
 # Database (PostgreSQL)
 DATABASES = {
