@@ -12,7 +12,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_supervisor = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     groups = models.ManyToManyField(Group, related_name="user_groups", blank=True)
