@@ -150,6 +150,8 @@ SWAGGER_SETTINGS = {
 }
 # Djoser
 DJOSER = {
+    'EMAIL_FRONTEND_PROTOCOL':config('FRONTEND_URL'),
+    'EMAIL_FRONTEND_SITE_NAME':'staybangla',
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}/',
     'ACTIVATION_URL': 'activate/{uid}/{token}/',
     'SEND_ACTIVATION_EMAIL': True,
