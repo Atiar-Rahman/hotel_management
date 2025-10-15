@@ -1,11 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
 from .models import Review
 from .serializers import ReviewSerializer
-from hotels.permissions import IsAdminOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 class ReviewViewSet(ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         hotel_id = self.kwargs.get("hotel_pk")  # nested route
